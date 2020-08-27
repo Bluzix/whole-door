@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Whole Door</title>
+
+    <!-- One HTML file instead of a CSS and HTML file to save space! -->
+    <style type="text/css">
+      /* Main Elements of the HTML page */
+      *{
+        overflow: hidden;
+        box-sizing: border-box;
+      }
+      body, html{
+        background-color: #000;
+        height: 100%;
+        margin: 0;
+      }
+      canvas{
+        touch-action: none;
+        cursor: none;
+        z-index: 1;
+      }
+    </style>
+  </head>
+  <body onload="startGame()">
+    <!-- This canvas will be used as the view from the "camera" -->
+    <canvas id="viewport"></canvas>
+    <!-- This canvas will be used to draw everything. -->
+    <canvas id="world" style="display:none"></canvas>
+  </body>
+  <script src="wholeDoor.js"></script>
+</html>
