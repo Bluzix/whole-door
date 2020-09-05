@@ -1,4 +1,4 @@
-/** Camera controller **/
+/**** Camera controller ****/
 class Ratiovision{
 
   /**
@@ -122,10 +122,92 @@ class Ratiovision{
 }
 
 
-/** The Game's actual Code **/
+/**** Object to handle Player Input ****/
+class MasterController{
+  /**
+  * Main Constructor
+  * Creates a new MasterController to handle Player Input
+  */
+  constructor(){
+    this.assignedObject = null;
+    this.keyMap = [];
+  }
+
+  /**
+  * Function assignKey(key, action)
+  * Assigns the key an action
+  *
+  * @param {key} int the unicode of a keybord key
+  * @param {action} int the action number; implement in object
+  * @post keyMap will be assigned the action for that key
+  * @post keyMap may contain holes if length was smaller than key
+  */
+  assignKey(key, action){
+    this.keyMap[key] = action;
+  }
+
+  /**
+  * Function assignObject(object)
+  * Assigns the object to be controlled by MasterController
+  *
+  * @param {object} object the object to be controlled by MasterController
+  * @post assignedObject will be assigned object
+  */
+  assignObject(object){
+    this.assignedObject = object;
+  }
+
+  /**
+  * Function doKeyUp(key)
+  * Tells the assigned object to perform the keyup action for key.
+  *
+  * @param {key} int the unicode of a keyboard key
+  * @preCon the assignedObject needs to implement doActionUp(action)
+  * @preCon there is an action in keyMap for this key
+  */
+  doKeyUp(key){
+    if (this.assignedObject){
+      this.assignedObject.doActionUp(this.keyMap[key]);
+    }
+    else {
+      console.log('MasterController needs an assigned object for doKeyUp(key) to work.');
+    }
+  }
+
+  /**
+  * Function doKeyDown(key)
+  * Tells the assigned object to perform the keydown action for key.
+  *
+  * @param {key} int the unicode of a keyboard key
+  * @preCon the assignedObject needs to implement doActionDown(action)
+  * @preCon there is an action in keyMap for this key
+  */
+  doKeyDown(key){
+    if (this.assignedObject){
+      this.assignedObject.doActionDown(this.keyMap[key]);
+    }
+    else {
+      console.log('MasterController needs an assigned object for doKeyDown(key) to work.');
+    }
+  }
+}
+
+
+/**** The Game's actual Code ****/
 // Initialize World (place to put in level objects)
 let world = document.getElementById('world');
 let worldCtx = world.getContext('2d');
+
+// Initialize the interface for User Input
+let controller = new MasterController();
+
+// assign WASD to movement, J to action 4, and K to action 5
+controller.assignKey(87, 0);
+controller.assignKey(65, 1);
+controller.assignKey(83, 2);
+controller.assignKey(68, 3);
+controller.assignKey(74, 4);
+controller.assignKey(75, 5);
 
 // Initialize the viewport (camera)
 let viewport = document.getElementById('viewport');
@@ -163,8 +245,20 @@ function startGame(){
     //music.play();
 };
 
-/*** When the Window is Resized ***/
+/**** When the Window is Resized ****/
 window.addEventListener('resize', function(){
   // resize camera
   camera.resized();
+});
+
+/**** When a key is pressed ****/
+document.addEventListener('keydown', function(e){
+  let keyCode = e.which || e.keyCode;
+  controller.doKeyDown(keyCode);
+});
+
+/**** When a key is released ****/
+document.addEventListener('keyup', function(e){
+  let keyCode = e.which || e.keyCode;
+  controller.doKeyUp(keyCode);
 });
